@@ -1,0 +1,35 @@
+import express, { Router } from 'express';
+import { createDiscountCode, createProduct, deleteDiscountCode, deleteProduct, deleteProductImage, getAllEvents, getAllProudcts, getCategories, getDiscountCodes, getFilteredEvents, getFilteredProducts, getFilteredShops, getProductDetails, getShopOffers, getShopProducts, restoreProduct, searchProducts, topShops, updateProduct, uploadProductImages } from '../controllers/product.controller';
+import isAuthenticated from '@packages/middleware/isAuthenticated';
+import { isSeller } from '@packages/middleware/authorizeRoles';
+
+const router: Router = express.Router();
+
+router.get("/get-categories", getCategories);
+
+router.post("/create-discount-code", isAuthenticated, createDiscountCode);
+router.get("/get-discount-codes", isAuthenticated, getDiscountCodes);
+router.delete("/delete-discount-code/:id", isAuthenticated, deleteDiscountCode);
+
+router.post("/upload-product-image", isAuthenticated, uploadProductImages);
+router.delete("/delete-product-image", isAuthenticated, deleteProductImage);
+
+router.post("/create-product", isAuthenticated, createProduct);
+router.put("/update-product/:productId", isAuthenticated, isSeller, updateProduct);
+router.get("/get-shop-products", isAuthenticated, isSeller, getShopProducts);
+router.get("/get-shop-events", isAuthenticated, isSeller, getShopOffers);
+
+router.delete("/delete-product/:productId", isAuthenticated, deleteProduct);
+router.put("/restore-product/:productId", isAuthenticated, restoreProduct);
+
+router.get("/get-all-products", getAllProudcts);
+router.get("/get-product/:slug", getProductDetails);
+
+router.get("/get-filtered-products", getFilteredProducts);
+router.get("/search-products", searchProducts);
+router.get("/get-filtered-offers", getFilteredEvents);
+router.get("/get-all-events", getAllEvents);
+
+router.get("/get-filtered-shops", getFilteredShops);
+router.get("/top-shops", topShops);
+export default router;
